@@ -9,14 +9,19 @@ import {
 
     EDIT_SMURF_START,
     EDIT_SMURF_SUCCESS,
-    EDIT_SMURF_FAILURE
+    EDIT_SMURF_FAILURE,
+
+    DELETE_SMURF_START,
+    DELETE_SMURF_SUCCESS,
+    DELETE_SMURF_FAILURE
 } from '../actions'
 
 const initialState = {
     fetching: false,
     smurfs: [],
     editingSmurf: false,
-    smurfToEditId: null
+    smurfToEditId: null,
+    smurfToDeleteId: null
 }
 
 export default function smurfReducer(state=initialState, action) {
@@ -50,7 +55,7 @@ export default function smurfReducer(state=initialState, action) {
             return {
                 ...state,
                 fetching: false,
-                smurfs: state.smurfs.concat(action.payload.slice(-1))
+                smurfs: action.payload
             }
 
         case ADD_NEW_SMURF_FAILURE: 
@@ -70,13 +75,34 @@ export default function smurfReducer(state=initialState, action) {
             return {
                 ...state,
                 editingSmurf: false,
-                smurfs: action.payload
+                smurfToEditId: null,
+                smurfs: action.payload,
             }
         
         case EDIT_SMURF_FAILURE: 
             return {
                 ...state,
-                editingSmurf: false
+                editingSmurf: false,
+                smurfToEditId: null
+            }
+        
+        case DELETE_SMURF_START: 
+            return {
+                ...state,
+                smurfToDeleteId: action.payload,
+            }
+
+        case DELETE_SMURF_SUCCESS: 
+            return {
+                ...state,
+                smurfToDeleteId: null,
+                smurfs: action.payload,
+            }
+
+        case DELETE_SMURF_FAILURE: 
+            return {
+                ...state,
+                smurfToDeleteId: null
             }
         
         default: 

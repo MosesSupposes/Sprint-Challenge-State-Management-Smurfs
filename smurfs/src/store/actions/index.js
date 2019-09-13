@@ -68,7 +68,28 @@ export const editSmurf = smurf => async (dispatch, getState) => {
         dispatch({ type: EDIT_SMURF_FAILURE })
         console.error(e)
     }
-
 }
 
 
+export const DELETE_SMURF_START = "DELETE_SMURF_START"
+export const DELETE_SMURF_SUCCESS = "DELETE_SMURF_SUCCESS"
+export const DELETE_SMURF_FAILURE = "DELETE_SMURF_FAILURE"
+
+
+
+export const deleteSmurf = id => async (dispatch, getState) => {
+    dispatch({ type: DELETE_SMURF_START, payload: id })
+    
+    try {
+        const { smurfToDeleteId } = getState()
+        const res = await fetch(`${baseUrl}/smurfs/${smurfToDeleteId}`, {
+            method: 'DELETE'
+        })
+        const parsedRes = await res.json()
+        console.log('DELETE SMURF SUCCESS RESPONSE' ,parsedRes)
+        dispatch({ type: DELETE_SMURF_SUCCESS, payload: parsedRes })
+    } catch(e) {
+        dispatch({ type: DELETE_SMURF_FAILURE })
+        console.error(e)
+    }
+}
