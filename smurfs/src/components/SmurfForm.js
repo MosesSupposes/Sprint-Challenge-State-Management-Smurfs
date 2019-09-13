@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { addNewSmurf } from '../store/actions'
+import { addNewSmurf, editSmurf } from '../store/actions'
 
 export default function SmurfForm(props) {
+    const {isEditing} = useSelector(state => ({
+        isEditing: state.editingSmurf,
+        smurfToEditId: state.smurfToEditId
+    }))
+
     const dispatch = useDispatch()
     
     const blankForm = {
@@ -20,7 +25,12 @@ export default function SmurfForm(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        dispatch(addNewSmurf(newSmurf))
+        if (isEditing) {
+            // dispatch put request 
+            dispatch(editSmurf(newSmurf))
+        } else {
+            dispatch(addNewSmurf(newSmurf))
+        }
         setNewSmurf(blankForm)
     }
     
