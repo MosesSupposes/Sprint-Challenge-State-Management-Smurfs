@@ -18,23 +18,35 @@ export default function SmurfForm(props) {
     }
 
     const [newSmurf, setNewSmurf] = useState(blankForm)
+    const [error, setError] = useState(null)
 
     const handleChange = (e) => {
         setNewSmurf({ ...newSmurf, [e.target.name]: e.target.value} )
     }
 
+    
     const handleSubmit = (e) => {
         e.preventDefault()
+        const atLeast1EmptyField = Object.values(newSmurf).some(field => field === '')
         if (isEditing) {
-            // dispatch put request 
-            dispatch(editSmurf(newSmurf))
+            if (atLeast1EmptyField ) {
+                setError('You must fill out all the fields') 
+            } else {
+                dispatch(editSmurf(newSmurf))
+                setNewSmurf(blankForm)
+            }
         } else {
-            dispatch(addNewSmurf(newSmurf))
+            if (atLeast1EmptyField ) {
+                setError('You must fill out all the fields') 
+            } else { 
+                dispatch(addNewSmurf(newSmurf))
+                setNewSmurf(blankForm)
+            }
         }
-        setNewSmurf(blankForm)
     }
     
     return (
+        <> { error && <p>{error}</p> }
         <form onSubmit={handleSubmit}>
             <input 
                 name="name"
@@ -60,5 +72,6 @@ export default function SmurfForm(props) {
             
             <button type="submit">+</button>
         </form>
+        </>
     )
 }
