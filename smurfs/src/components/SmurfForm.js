@@ -46,7 +46,7 @@ export default function SmurfForm(props) {
     }
     
     return (
-        <> { error && <p>{error}</p> }
+        <> { error && <p style={{color: "red"}}>{error}</p> }
         <form onSubmit={handleSubmit}>
             <input 
                 name="name"
